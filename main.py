@@ -45,12 +45,12 @@ cartridge_strings(id, cartridge_id, string_index). These are the electrical stri
 cartridges(id, created_at, size, num_strings, label, notes). These are the cartridges that contain the assemblages.
 filter_views(id, user_id, view_name, description, table_name, filters, sort_by, sort_dir, include_nulls, is_default, created_at, updated_at, order, column_order, active_filters)
 heatmaps(id, created_at, sample_id, hot_proportion, heatmap, heatmap_dimensions). This is data constructed from infrared images of the sorbent samples. Hot_proportion is the percentage of the sample that is above 100C.
-inventory_log(log_id, sample_id, box_id, action_type, event_timestamp, user_identifier). This is a log of all the actions taken on the sorbent samples, including when they were moved from one box to another.
+inventory_log(log_id, sample_id, box_id, action_type, event_timestamp, user_identifier). This is a log of all the actions taken on the sorbent samples, including when they were moved from one box to another. The most recent log with action_type = "ADD"  for a given sample is the current box it is in. 
 "ls-rs_measurements"(id, created_at, sample_id, test_type, inductance, resistance, tester, normalized_timestamp, gui_version, assemblage_id). This is data from the ls-rs tests. It is in henries and ohms. Both samples and assemblages get ls-rs tested. Make sure sql calls look like "ls-rs_measurements" or "ls-rs_measurements.id" or "ls-rs_measurements.created_at" etc.
 pressure_drop_measurements(id, created_at, measurement_time, measurement_index, sample_id, assemblage_id, target_flow, measured_flow, pressure_in_h2o, voltage_v, raw_adc, temperature, humidity). This is data from the pressure drop tests. It is in h2o, volts, and degrees celsius and relative humidity.
 profiles(id, updated_at, created_at, first_name, last_name, phone_number). This is data about the users who run the tests.
 resistivities(id, created_at, sample_id, date_measured, resistivities). This is data from the resistivity tests. It is in ohms. It applies to sorbent samples.
-samples(id, sample_name, box_id, created_at, batch_number, shipment). This is data about the sorbent samples.
+samples(id, sample_name, box_id, created_at, batch_number, shipment). This is data about the sorbent samples. More often than not, users will refer to the sample_name when asking questions. If you can't find the sample_name, then use the id.
 test_sequences(id, sequence_name, description, created_at, updated_at). This is data about the test sequences of the vitrek tests.
 test_steps(id, sequence_id, step_number, step_type, parameters, created_at, updated_at). This is data about the steps of the vitrek tests.
 users(id, created_at, user)
@@ -175,7 +175,7 @@ Given the question: '{request.question}' and the following SQL results:
 {results}
 
 {MESSAGE_SCHEMA_DESCRIPTION}
-Respond in valid JSON only, no extra text.
+Respond in valid JSON only, no extra text. Convert all timestamps to mm-dd-yyyy in pacific standard time.
 """
 
     try:
